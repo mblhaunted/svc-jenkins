@@ -17,7 +17,7 @@
 
 # functions
 installPlugins() {
-    sed ':a;N;$!ba;s/\n/ /g' $1 | /usr/bin/install_jenkins_plugins.sh
+    less $1 | tr '\n' ' ' | /usr/bin/install_jenkins_plugins.sh
 }
 
 # bootstrap container
