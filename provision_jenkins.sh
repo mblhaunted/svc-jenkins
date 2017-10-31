@@ -1,24 +1,30 @@
 #!/bin/bash
-###########################
-# provision jenkins on k8s
-###########################
+###########################################
+# dynamically provision jenkins on k8s
+# maintainer: matthew.lindsey@logrhythm.com
+###########################################
 
-# vars
+# fancy vars
+: ${GITHUB_ORG:=Logrhythm}
+: ${GITHUB_BASE:=https://github.schq.secious.com}
+: ${GITHUB_REPO:=lr-kubernetes.git}
 : ${CONFIG_BRANCH:=master}
 : ${CONFIG_DEST:=/tmp/jenkins-config}
 : ${CONFIG_BASE:=$CONFIG_DEST/jenkins_config}
-: ${DEFAULT_PLUGIN_FP:=/tmp/default_jenkins_plugins}
 : ${CUSTOM_PLUGINS:=plugins}
 : ${CUSTOM_MAIN_CONFIG:=config.xml}
-: ${CONFIG_REPO:=https://github.schq.secious.com/Logrhythm/lr-kubernetes.git}
+: ${CONFIG_REPO:=$GITHUB_BASE/$GITHUB_ORG/$GITHUB_REPO}
 : ${CUSTOM_PLUGIN_FP:=$CONFIG_BASE/$CUSTOM_PLUGINS}
 : ${CUSTOM_CONFIG_FP:=$CONFIG_BASE/$CUSTOM_MAIN_CONFIG}
 : ${CUSTOM_JOBS_PATH:=$CONFIG_BASE/jobs}
+: ${DEFAULT_PLUGIN_FP:=/tmp/default_jenkins_plugins}
 : ${JENKINS_WD:=/var/jenkins_home}
 
 # functions
 installPlugins() {
-    less $1 | tr '\n' ' ' | /usr/bin/install_jenkins_plugins.sh
+    less $1 | while read line do;
+        /usr/bin/install_jenkins_plugins.sh $1
+    done
 }
 
 # bootstrap container
