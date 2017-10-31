@@ -7,7 +7,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-plugin_dir=/var/lib/jenkins_home/plugins
+plugin_dir=/var/jenkins_home/plugins
 file_owner=jenkins.jenkins
 
 mkdir -p $plugin_dir
