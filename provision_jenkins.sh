@@ -4,9 +4,10 @@
 ###########################
 
 # vars
-: ${CONFIG_DEST=/tmp/jenkins-config}
-: ${CONFIG_BASE=$CONFIG_DEST/jenkins_config}
-: ${DEFAULT_PLUGIN_FP=/tmp/default_jenkins_plugins}
+: ${CONFIG_BRANCH:=master}
+: ${CONFIG_DEST:=/tmp/jenkins-config}
+: ${CONFIG_BASE:=$CONFIG_DEST/jenkins_config}
+: ${DEFAULT_PLUGIN_FP:=/tmp/default_jenkins_plugins}
 : ${CUSTOM_PLUGINS:=plugins}
 : ${CUSTOM_MAIN_CONFIG:=config.xml}
 : ${CONFIG_REPO:=https://github.schq.secious.com/Logrhythm/lr-kubernetes.git}
@@ -32,6 +33,9 @@ fi
 
 # clone configuration repository
 git clone $CONFIG_REPO $CONFIG_DEST
+cd $CONFIG_DEST
+git checkout $CONFIG_BRANCH
+cd -
 
 # check for custom plugins
 if [ -f $CUSTOM_PLUGIN_FP ]; then
