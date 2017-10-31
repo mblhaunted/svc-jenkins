@@ -22,8 +22,8 @@
 
 # functions
 installPlugins() {
-    less $1 | while read line do;
-        /usr/bin/install_jenkins_plugins.sh $1
+    less "$1" | while read -r line || [[ -n "$line" ]]; do
+        /usr/bin/install_jenkins_plugins.sh "$line"
     done
 }
 
