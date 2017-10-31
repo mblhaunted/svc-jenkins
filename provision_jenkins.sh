@@ -58,3 +58,6 @@ fi
 if [ -f $CUSTOM_JOBS_PATH ]; then
     cp -R $CUSTOM_JOBS_PATH/* $JENKINS_WD/jobs/
 fi
+
+# fix permissions
+chown jenkins.jenkins "$JENKINS_WD" -R
