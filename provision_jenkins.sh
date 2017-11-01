@@ -8,7 +8,7 @@
 : ${GITHUB_ORG:=Logrhythm}
 : ${GITHUB_BASE:=https://github.schq.secious.com}
 : ${GITHUB_REPO:=lr-kubernetes.git}
-: ${CONFIG_BRANCH:=master}
+: ${GITHUB_BRANCH:=master}
 : ${CONFIG_DEST:=/tmp/jenkins-config}
 : ${CONFIG_BASE:=$CONFIG_DEST/jenkins_config}
 : ${CUSTOM_PLUGINS:=plugins}
@@ -40,7 +40,7 @@ fi
 # clone configuration repository
 git clone $CONFIG_REPO $CONFIG_DEST
 cd $CONFIG_DEST
-git checkout $CONFIG_BRANCH
+git checkout $GITHUB_BRANCH
 cd -
 
 # check for custom plugins
