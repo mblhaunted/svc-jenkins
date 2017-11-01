@@ -27,37 +27,59 @@ installPlugins() {
     done
 }
 
-# bootstrap container
-mkdir -p $CONFIG_DEST
+installDefaultPlugins() {
+    if [ -f $DEFAULT_PLUGIN_FP ]; then
+        echo "found default jenkins plugins, installing:"
+        cat $DEFAULT_PLUGIN_FP
+        installPlugins $DEFAULT_PLUGIN_FP
+    fi
+}
 
-# install basic plugins
-if [ -f $DEFAULT_PLUGIN_FP ]; then
-    echo "found default jenkins plugins, installing:"
-    cat $DEFAULT_PLUGIN_FP
-    installPlugins $DEFAULT_PLUGIN_FP
-fi
+bootstrapContainer() {
+    mkdir -p $CONFIG_DEST
+}
 
-# clone configuration repository
-git clone $CONFIG_REPO $CONFIG_DEST
-cd $CONFIG_DEST
-git checkout $GITHUB_BRANCH
-cd -
+cloneJenkinsConfiguration() {
+    git clone $CONFIG_REPO $CONFIG_DEST
+    cd $CONFIG_DEST
+    git checkout $GITHUB_BRANCH
+    cd -
+}
 
-# check for custom plugins
-if [ -f $CUSTOM_PLUGIN_FP ]; then
-    echo "found custom jenkins plugins. installing:"
-    cat $CUSTOM_PLUGIN_FP
-    installPlugins $CUSTOM_PLUGIN_FP
-fi
+installCustomPlugins() {
+    if [ -f $CUSTOM_PLUGIN_FP ]; then
+        echo "found custom jenkins plugins. installing:"
+        cat $CUSTOM_PLUGIN_FP
+        installPlugins $CUSTOM_PLUGIN_FP
+    fi
+}
 
-# provision jenkins server with stored configuration
-if [ -f $CUSTOM_CONFIG_FP ]; then
-    echo "found main config.xml. installing ..."
-    cp $CUSTOM_CONFIG_FP $JENKINS_WD
-fi
+copyJenkinsConfiguration() {
+    if [ -f $CUSTOM_CONFIG_FP ]; then
+        echo "found main config.xml. installing ..."
+        cp $CUSTOM_CONFIG_FP $JENKINS_WD
+    fi
+}
 
-if [ -f $CUSTOM_JOBS_PATH ]; then
-    echo "found custom jobs. installing ..."
-    cp -R $CUSTOM_JOBS_PATH/* $JENKINS_WD/jobs/
-fi
-/bin/tini -- /usr/local/bin/jenkins.sh
+copyJenkinsJobs() {
+    if [ -f $CUSTOM_JOBS_PATH ]; then
+        echo "found custom jobs. installing ..."
+        cp -R $CUSTOM_JOBS_PATH/* $JENKINS_WD/jobs/
+    fi
+}
+
+startJenkins() {
+    /bin/tini -- /usr/local/bin/jenkins.sh
+}
+
+main() {
+    installDefaultPlugins
+    bootstrapContainer
+    cloneJenkinsConfiguration
+    installCustomPlugins
+    copyJenkinsConfiguration
+    copyJenkinsJobs
+    startJenkins
+}
+
+main
