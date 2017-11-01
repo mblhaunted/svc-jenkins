@@ -52,6 +52,7 @@ fi
 
 # provision jenkins server with stored configuration
 if [ -f $CUSTOM_CONFIG_FP ]; then
+    echo "found main config.xml. installing ..."
     cp $CUSTOM_CONFIG_FP $JENKINS_WD
 fi
 
