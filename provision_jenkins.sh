@@ -60,3 +60,4 @@ if [ -f $CUSTOM_JOBS_PATH ]; then
     echo "found custom jobs. installing ..."
     cp -R $CUSTOM_JOBS_PATH/* $JENKINS_WD/jobs/
 fi
+/bin/tini -- /usr/local/bin/jenkins.sh
